@@ -1,0 +1,13 @@
+import plotly.express as px
+
+DEFAULT_SCALENAME = px.colors.named_colorscales()[0]
+NEURON_SIZE = 1
+X_DISTANCE = 4
+Y_DISTANCE = 1
+
+X_STEP = X_DISTANCE + NEURON_SIZE
+Y_STEP = Y_DISTANCE + NEURON_SIZE
+LINE_WIDTH = 3
+
+MIN_RANGE = -2
+MAX_RANGE = 2
