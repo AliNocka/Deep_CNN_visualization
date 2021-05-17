@@ -48,31 +48,31 @@ def get_figure(n_layers, n_neurons, scalename, W_in, W, W_out, training_layer=No
 
     shapes = [dict(type="circle",
                    xref="x", yref="y",
-                   fillcolor="red" if (training_layer == i) or (training_layer == i + 1) else "PaleTurquoise",
+                   fillcolor="#E74A4A" if (training_layer == i) or (training_layer == i + 1) else "#B1BCE1",
                    x0=X_STEP * i, y0=Y_STEP * j, x1=X_STEP * i + NEURON_SIZE, y1=Y_STEP * j + NEURON_SIZE,
-                   line_color="LightSeaGreen"
+                   line_color="#829FBA"
                    ) for i in range(0, n_layers + 1) for j in range(0, n_neurons)]
     # Add input layer
     delta_input = Y_STEP * (n_input - n_neurons) / 2
     shapes += [dict(type="circle",
                     xref="x", yref="y",
-                    fillcolor="red" if training_layer == 0 else "PaleTurquoise",
+                    fillcolor="#E74A4A" if training_layer == 0 else "#B1BCE1",
                     x0=-X_STEP,
                     y0=Y_STEP * i - delta_input,
                     x1=-X_STEP + NEURON_SIZE,
                     y1=Y_STEP * i + NEURON_SIZE - delta_input,
-                    line_color="LightSeaGreen"
+                    line_color="#829FBA"
                     ) for i in range(0, n_input)]
     # Add output layer
     delta_output = Y_STEP * (n_output - n_neurons) / 2
     shapes += [dict(type="circle",
                     xref="x", yref="y",
-                    fillcolor="red" if training_layer == n_layers + 1 else "PaleTurquoise",
+                    fillcolor="#E74A4A" if training_layer == n_layers + 1 else "#B1BCE1",
                     x0=X_STEP * (n_layers + 1),
                     y0=Y_STEP * i - delta_output,
                     x1=X_STEP * (n_layers + 1) + NEURON_SIZE,
                     y1=Y_STEP * i + NEURON_SIZE - delta_output,
-                    line_color="LightSeaGreen"
+                    line_color="#829FBA"
                     ) for i in range(0, n_output)]
 
     x_ar = []
@@ -180,21 +180,23 @@ def render_graph(n_layers, n_neurons, scalename):
     return get_figure(n_layers, n_neurons, scalename, W_in, W, W_out), True
 
 
-def init_train(n_layers, n_neurons, scalename):
+def init_train(n_layers, n_neurons, activation, batch_size,max_opt_iter, max_iter,
+               optimizer, lr, l2, method, scalename):
+    print(method)
     global CLF
     X, X_test, y, y_test = load_data()
     CLF = DeepCNNClassifier(
         verbose=True,
         n_layers=n_layers,
         n_features=n_neurons,
-        batch_size=5000,
-        max_opt_iter=100,
-        max_iter=100,
-        activation='leakyReLU',
-        optimizer='adam',
-        lr=1e-2,
-        l2=1e-2,
-        method='euler'
+        batch_size=batch_size,
+        max_opt_iter=max_opt_iter,
+        max_iter=max_iter,
+        activation=activation,
+        optimizer=optimizer,
+        lr=lr,
+        l2=l2,
+        method=method
     )
     CLF.fit(X, y, X_test, y_test)
     W_in = CLF._layers[0].W.detach().numpy()
